@@ -1,18 +1,17 @@
 <template>
   <div class="container">
     <div class="card" style="width: 28rem">
-
       <div class="login-container" id="del">
         <h2>Create a Secure Account</h2>
       </div>
-      
+
       <form @submit.prevent="registerUser">
         <div class="row">
           <div class="col">
             <div class="form-group">
               <label for="full_name" class="mt-3">Name</label>
+
               <input
-                
                 v-model.trim="$v.register.fullname.$model"
                 type="text"
                 class="form-control form-control-md"
@@ -20,15 +19,18 @@
                 placeholder="Full Name"
                 id="full_name"
               />
-               <div class="error" v-if="register.fullname.length && !$v.register.fullname.required">Name is required</div>
-  <div
-    class="error"
-    v-if="!$v.register.fullname.minLength"
-  >Name must have at least {{$v.register.fullname.$params.minLength.min}} letters.</div>
-  <div
-    class="error"
-    v-if="!$v.register.fullname.maxLength"
-  >Name must have at most {{$v.register.fullname.$params.maxLength.max}} letters.</div>
+              <div
+                class="error"
+                v-if="register.fullname.length && !$v.register.fullname.required"
+              >Name is required</div>
+              <div
+                class="error"
+                v-if="!$v.register.fullname.minLength"
+              >Name must have at least {{$v.register.fullname.$params.minLength.min}} letters.</div>
+              <div
+                class="error"
+                v-if="!$v.register.fullname.maxLength"
+              >Name must have at most {{$v.register.fullname.$params.maxLength.max}} letters.</div>
             </div>
           </div>
         </div>
@@ -39,12 +41,24 @@
               <label for="user_name" class="mt-3">Username</label>
               <input
                 type="text"
-                v-model="register.username"
+                v-model.trim="$v.register.username.$model"
                 class="form-control form-control-md"
                 required
                 placeholder="Username"
                 id="user_name"
               />
+                <div
+                class="error"
+                v-if="register.username.length && !$v.register.username.required"
+              >Username is required</div>
+              <div
+                class="error"
+                v-if="!$v.register.username.minLength"
+              >username must have at least {{$v.register.username.$params.minLength.min}} characters.</div>
+              <div
+                class="error"
+                v-if="!$v.register.username.maxLength"
+              >username must have at most {{$v.register.username.$params.maxLength.max}} characters.</div>
             </div>
           </div>
 
@@ -57,6 +71,7 @@
                 class="form-control form-control-md"
                 required
                 placeholder="PhoneNumber"
+              
                 id="phone_number"
               />
             </div>
@@ -125,13 +140,11 @@
 const axios = require("axios");
 import toast from "../toast";
 import router from "../router";
-import { validationMixin } from "vuelidate"
+import { validationMixin } from "vuelidate";
+import { helpers } from 'vuelidate/lib/validators'
+const alpha = helpers.regex('alpha', /^[0-9]*$/)
 
-const {
-  required,
-  maxLength,
-  minLength
-} = require("vuelidate/lib/validators")
+const { required, maxLength, minLength } = require("vuelidate/lib/validators");
 
 export default {
   name: "signup",
@@ -152,15 +165,20 @@ export default {
 
   validations: {
     register: {
-  fullname: {
-    required,
-    minLength: minLength(6),
-    maxLength: maxLength(20)
-  }
-    } 
-},
-  
-  
+      fullname: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(20)
+      },
+      username: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(15)
+      },
+     
+    }
+  },
+
   methods: {
     async registerUser() {
       try {
@@ -275,12 +293,10 @@ h2 {
   font-size: x-large;
   margin-bottom: 10px;
 }
-a :hover{
+a :hover {
   text-decoration: none;
-  
 }
-.error{
-  color: red
+.error {
+  color: red;
 }
-
 </style>
