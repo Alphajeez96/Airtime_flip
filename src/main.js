@@ -8,6 +8,8 @@
     import swal from 'sweetalert';
     import VueCookie from 'vue-cookie'
     import jquery from 'jquery'
+    import Vuelidate from 'vuelidate'
+
 
     const base = axios.create({
         baseURL: "https://test.airtimeflip.com/api/v1/"
@@ -15,7 +17,7 @@
 
     Vue.prototype.$http = base;
     Vue.config.productionTip = false
-    Vue.use(VueAxios, axios, sweetAlert, VueCookie, jquery)
+    Vue.use(VueAxios, axios, sweetAlert, VueCookie, jquery, Vuelidate)
 
     new Vue({
         router,

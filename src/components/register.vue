@@ -12,13 +12,23 @@
             <div class="form-group">
               <label for="full_name" class="mt-3">Name</label>
               <input
-                v-model="register.fullname"
+                
+                v-model.trim="$v.register.fullname.$model"
                 type="text"
                 class="form-control form-control-md"
                 required
                 placeholder="Full Name"
                 id="full_name"
               />
+               <div class="error" v-if="register.fullname.length && !$v.register.fullname.required">Name is required</div>
+  <div
+    class="error"
+    v-if="!$v.register.fullname.minLength"
+  >Name must have at least {{$v.register.fullname.$params.minLength.min}} letters.</div>
+  <div
+    class="error"
+    v-if="!$v.register.fullname.maxLength"
+  >Name must have at most {{$v.register.fullname.$params.maxLength.max}} letters.</div>
             </div>
           </div>
         </div>
@@ -115,6 +125,13 @@
 const axios = require("axios");
 import toast from "../toast";
 import router from "../router";
+import { validationMixin } from "vuelidate"
+
+const {
+  required,
+  maxLength,
+  minLength
+} = require("vuelidate/lib/validators")
 
 export default {
   name: "signup",
@@ -130,6 +147,20 @@ export default {
       }
     };
   },
+
+  mixins: [validationMixin],
+
+  validations: {
+    register: {
+  fullname: {
+    required,
+    minLength: minLength(6),
+    maxLength: maxLength(20)
+  }
+    } 
+},
+  
+  
   methods: {
     async registerUser() {
       try {
@@ -247,6 +278,9 @@ h2 {
 a :hover{
   text-decoration: none;
   
+}
+.error{
+  color: red
 }
 
 </style>
